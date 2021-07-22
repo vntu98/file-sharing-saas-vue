@@ -10,18 +10,28 @@
       </ul>
 
       <ul class="flex items-center">
-        <li>
-          <router-link :to="{ name: 'login' }" class="text-sm inline-block p-3 text-gray-800">Sign in</router-link>
-        </li>
-        <li>
-          <a href="" class="text-sm inline-block p-3 text-gray-800">Create account</a>
-        </li>
+        <template v-if="!authenticated">
+          <li>
+            <router-link :to="{ name: 'login' }" class="text-sm inline-block p-3 text-gray-800">Sign in</router-link>
+          </li>
+          <li>
+            <a href="" class="text-sm inline-block p-3 text-gray-800">Create account</a>
+          </li>
+        </template>
+        <template v-if="authenticated">
+          <li>
+            <a href="" class="text-sm inline-block p-3 text-gray-800">Account</a>
+          </li>
+          <li>
+            <a href="" class="text-sm inline-block p-3 text-gray-800" @click.prevent="logout">Log out</a>
+          </li>
+        </template>
       </ul>
     </header>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
@@ -29,6 +39,18 @@ export default {
       authenticated: 'auth/authenticated',
       user: 'auth/user'
     })
-  }
+  },
+
+  methods: {
+    ...mapActions({
+      logoutAction: 'auth/logout'
+    }),
+
+    async logout() {
+      await this.logoutAction()
+
+      this.$router.replace({ name: 'home' })
+    }
+  },
 }
 </script>
