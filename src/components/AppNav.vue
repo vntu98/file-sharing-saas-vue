@@ -5,7 +5,7 @@
           <router-link :to="{ name: 'home' }" class="text-sm inline-block p-3 text-gray-800">Home</router-link>
         </li>
         <li>
-          <a href="" class="text-sm inline-block p-3 text-gray-800">Your files</a>
+          <router-link :to="{ name: 'upload' }" class="text-sm inline-block p-3 text-gray-800">Your files</router-link>
         </li>
       </ul>
 
