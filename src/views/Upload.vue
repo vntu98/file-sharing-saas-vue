@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mb-8">
-            <app-uploader />
+            <app-uploader @onprocessfile="storeFile"/>
         </div>
         <div>
             <h2 class="font-medium pb-3 border-b-2 border-gray-100 text-gray-800">Your files</h2>
@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppFile from '../components/AppFile.vue'
 import AppUploader from '../components/AppUploader.vue'
 
@@ -35,7 +36,21 @@ export default {
     methods: {
         ...mapActions({
             getFiles: 'files/getFiles'
-        })
+        }),
+
+        ...mapMutations({
+            addFile: 'files/ADD_FILE'
+        }),
+
+        async storeFile(file) {
+            const response = await axios.post('/api/files', {
+                name: file.filename,
+                size: file.fileSize,
+                path: file.serverId
+            })
+
+            this.addFile(response.data.data)
+        }
     },
 
     mounted() {
