@@ -15,6 +15,7 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 const stripe = Stripe(process.env.VUE_APP_STRIPE_KEY)
 const elements = stripe.elements()
@@ -41,6 +42,10 @@ export default {
     },
 
     methods: {
+        ...mapActions({
+            me: 'auth/me'
+        }),
+
         async submit() {
             const { setupIntent, error } =await stripe.confirmCardSetup(
                 this.intent.client_secret, {
@@ -54,8 +59,16 @@ export default {
             if (error) {
 
             } else {
-                console.log(setupIntent)
+                await this.createSubscription(setupIntent.payment_method)
             }
+        },
+
+        async createSubscription(token) {
+            await axios.post('/api/subscriptions', { plan: this.plan, token })
+
+            await this.me()
+
+            this.$router.replace({ name: 'account' })
         }
     },
 

@@ -24,14 +24,14 @@
         </template>
         <template v-if="authenticated">
           <li>
-            <a href="" class="text-sm inline-block p-3 text-gray-800">Account</a>
+            <router-link :to="{ name: 'account' }" class="text-sm inline-block p-3 text-gray-800">Account</router-link>
           </li>
           <li>
             <a href="" class="text-sm inline-block p-3 text-gray-800" @click.prevent="logout">Log out</a>
           </li>
         </template>
 
-        <li>
+        <li v-if="!authenticated || !user.subscribed">
           <router-link :to="{ name: 'plans' }" class="text-sm inline-block p-3 text-indigo-500">
             Upgrade ✨
           </router-link>

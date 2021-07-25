@@ -4,6 +4,8 @@ import Login from '../views/Login.vue'
 import Upload from '../views/Upload.vue'
 import Plans from '../views/Plans.vue'
 import Checkout from '../views/Checkout.vue'
+import Account from '../views/Account.vue'
+import Swap from '../views/Swap.vue'
 
 const routes = [
   {
@@ -31,6 +33,17 @@ const routes = [
     name: 'checkout',
     component: Checkout,
     props: route => ({ plan: route.query.plan })
+  },
+  {
+    path: '/account',
+    name: 'account',
+    component: Account
+  }
+  ,
+  {
+    path: '/swap',
+    name: 'swap',
+    component: Swap
   }
 ]
 
