@@ -30,6 +30,12 @@
             <a href="" class="text-sm inline-block p-3 text-gray-800" @click.prevent="logout">Log out</a>
           </li>
         </template>
+
+        <li>
+          <router-link :to="{ name: 'plans' }" class="text-sm inline-block p-3 text-indigo-500">
+            Upgrade ✨
+          </router-link>
+        </li>
       </ul>
     </header>
 </template>

@@ -1,0 +1,69 @@
+<template>
+    <form action="" @submit.prevent="submit">
+        <div class="mb-6">
+            <label for="name" class="inline-block text-sm mb-2">Your name</label>
+            <input v-model="form.name" type="text" id="name" class="w-full border-2 border-gray-200 h-10 px-3 rounded-md">
+        </div>
+        <div class="mb-6">
+            <label for="card" class="inline-block text-sm mb-2">Card details</label>
+            <div id="card" ref="card"></div>
+        </div>
+
+        <button type="submit" class="bg-indigo-500 text-white px-4 py-3 leading-none rounded-lg font-medium">Pay</button>
+    </form>
+</template>
+
+<script>
+import axios from 'axios'
+
+const stripe = Stripe(process.env.VUE_APP_STRIPE_KEY)
+const elements = stripe.elements()
+const cardElement = elements.create('card')
+
+export default {
+    props: {
+        plan: {
+            required: true,
+            type: String
+        }
+    },
+
+    data() {
+        return {
+            intent: {
+                client_secret: null
+            },
+
+            form: {
+                name: ''
+            }
+        }
+    },
+
+    methods: {
+        async submit() {
+            const { setupIntent, error } =await stripe.confirmCardSetup(
+                this.intent.client_secret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: { name: this.form.name }
+                    }
+                }
+            )
+
+            if (error) {
+
+            } else {
+                console.log(setupIntent)
+            }
+        }
+    },
+
+    async mounted() {
+        let response = await axios.get('/api/subscriptions/intent')
+        this.intent.client_secret = response.data.data.client_secret
+
+        cardElement.mount(this.$refs.card)
+    },
+}
+</script>
