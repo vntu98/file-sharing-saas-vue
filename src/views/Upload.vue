@@ -39,7 +39,8 @@ export default {
         }),
 
         ...mapMutations({
-            addFile: 'files/ADD_FILE'
+            addFile: 'files/ADD_FILE',
+            incrementUsage: 'usage/INCREMENT_USAGE'
         }),
 
         async storeFile(file) {
@@ -50,6 +51,7 @@ export default {
             })
 
             this.addFile(response.data.data)
+            this.incrementUsage(file.fileSize)
         }
     },
 

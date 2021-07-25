@@ -9,6 +9,10 @@
         </li>
       </ul>
 
+      <div class="flex justify-center order-last w-full md:w-auto md:order-none">
+        <app-usage v-if="authenticated"/>
+      </div>
+
       <ul class="flex items-center">
         <template v-if="!authenticated">
           <li>
@@ -32,8 +36,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import AppUsage from './AppUsage.vue'
 
 export default {
+  components: { AppUsage },
   computed: {
     ...mapGetters({
       authenticated: 'auth/authenticated',
