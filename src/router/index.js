@@ -6,6 +6,7 @@ import Plans from '../views/Plans.vue'
 import Checkout from '../views/Checkout.vue'
 import Account from '../views/Account.vue'
 import Swap from '../views/Swap.vue'
+import Download from '../views/Download.vue'
 
 const routes = [
   {
@@ -38,12 +39,17 @@ const routes = [
     path: '/account',
     name: 'account',
     component: Account
-  }
-  ,
+  },
   {
     path: '/swap',
     name: 'swap',
     component: Swap
+  },
+  {
+    path: '/download/:uuid',
+    name: 'download-uuid',
+    component: Download,
+    props: route => ({ uuid: route.params.uuid, token: route.query.token })
   }
 ]
 
