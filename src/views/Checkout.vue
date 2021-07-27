@@ -9,19 +9,21 @@
             <div id="card" ref="card"></div>
         </div>
 
-        <button type="submit" class="bg-indigo-500 text-white px-4 py-3 leading-none rounded-lg font-medium">Pay</button>
+        <app-button :loading="loading" title="Pay" type="submit" />
     </form>
 </template>
 
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
+import AppButton from '../components/AppButton.vue'
 
 const stripe = Stripe(process.env.VUE_APP_STRIPE_KEY)
 const elements = stripe.elements()
 const cardElement = elements.create('card')
 
 export default {
+  components: { AppButton },
     props: {
         plan: {
             required: true,
@@ -31,6 +33,8 @@ export default {
 
     data() {
         return {
+            loading: false,
+
             intent: {
                 client_secret: null
             },
@@ -41,12 +45,14 @@ export default {
         }
     },
 
-    methods: {
+    methods: { 
         ...mapActions({
             me: 'auth/me'
         }),
 
         async submit() {
+            this.loading = true
+
             const { setupIntent, error } =await stripe.confirmCardSetup(
                 this.intent.client_secret, {
                     payment_method: {
@@ -57,9 +63,10 @@ export default {
             )
 
             if (error) {
-
+                this.loading = false
             } else {
                 await this.createSubscription(setupIntent.payment_method)
+                this.loading = false
             }
         },
 

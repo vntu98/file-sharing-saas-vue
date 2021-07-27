@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <button type="submit" class="bg-indigo-500 text-white px-4 py-3 leading-none rounded-lg font-medium" v-if="availablePlans.length">Swap</button>
+        <app-button v-if="availablePlans.length" :disabled="loading || !form.plan" :loading="loading" title="Swap" type="submit" />
         <p v-else class="text-gray-800 text-sm">There are no available plans for you to swap to right now, because your're using too much storage.</p>
     </form>
 </template>
@@ -18,11 +18,13 @@
 import axios from 'axios'
 import AppPlan from '../components/AppPlan.vue'
 import { mapActions, mapGetters } from 'vuex'
+import AppButton from '../components/AppButton.vue'
 
 export default {
-  components: { AppPlan },
+  components: { AppPlan, AppButton },
     data() {
         return {
+            loading: false,
             plans: [],
             planAvailability: [],
             form: {
@@ -55,8 +57,12 @@ export default {
         }),
 
         async swap() {
+            this.loading = true
+
             await axios.patch('/api/subscriptions', this.form)
             await this.me()
+
+            this.loading = false
 
             this.$router.replace({ name: 'account' })
         }
