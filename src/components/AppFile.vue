@@ -27,7 +27,8 @@ export default {
 
     methods: {
         ...mapActions({
-            deleteFileAction: 'files/deleteFile'
+            deleteFileAction: 'files/deleteFile',
+            snack: 'snack/snack'
         }),
 
         ...mapMutations({
@@ -38,6 +39,7 @@ export default {
             if (window.confirm('Really delete this file?')) {
                 await this.deleteFileAction(this.file.uuid)
 
+                this.snack('File was deleted!')
                 this.decrementUsage(this.file.size)
             }
         }

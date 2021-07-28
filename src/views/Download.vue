@@ -40,7 +40,13 @@ export default {
 
     methods: {
         download() {
-            
+            let dummy = document.createElement('a')
+
+            dummy.href = this.meta.url
+            document.body.appendChild(dummy)
+
+            dummy.click()
+            document.body.removeChild(dummy)
         },
 
         async getFile() {

@@ -40,6 +40,10 @@ export default {
 
         availablePlans() {
             return this.plans.filter(p => p.slug !== this.user.plan.slug && this.planAvailability[p.slug])
+        },
+
+        chosenPlan() {
+            return this.plans.find(p => p.slug === this.form.plan)
         }
     },
 
@@ -53,7 +57,8 @@ export default {
 
     methods: {
         ...mapActions({
-            me: 'auth/me'
+            me: 'auth/me',
+            snack: 'snack/snack'
         }),
 
         async swap() {
@@ -64,6 +69,7 @@ export default {
 
             this.loading = false
 
+            this.snack(`You have swapped to the ${this.chosenPlan.name} plan`)
             this.$router.replace({ name: 'account' })
         }
     },

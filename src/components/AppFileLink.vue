@@ -6,6 +6,7 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
     props: {
@@ -16,6 +17,10 @@ export default {
     },
 
     methods: {
+        ...mapActions({
+            snack: 'snack/snack'
+        }),
+
         copyToClipboard(value) {
             let dummy = document.createElement('input')
 
@@ -24,6 +29,8 @@ export default {
             dummy.select()
             document.execCommand('copy')
             document.body.removeChild(dummy)
+
+            this.snack('Copied to clipboard!')
         },
 
         async getLink() {
